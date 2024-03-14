@@ -1,0 +1,203 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Customer {
+    string name;
+    string coffeeOrder;
+};
+
+struct Order {
+    Customer customer;
+    Order* next;
+};
+
+string menu[] = {"Espresso", "Latte", "Cappuccino", "Mocha", "Black"};
+int menuSize = 5;
+
+void displayMenu() {
+    cout << "Menu:\n";
+    for (int i = 0; i < menuSize; ++i) {
+        cout << i + 1 << ". " << menu[i] << endl;
+    }
+}
+
+void addOrder(Order*& head, Customer customer) {
+    Order* newOrder = new Order;
+    newOrder->customer = customer;
+    newOrder->next = nullptr;
+    
+    if (head == nullptr) {
+        head = newOrder;
+    } else {
+        Order* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newOrder;
+    }
+}
+
+void displayOrders(Order* head) {
+    cout << "Orders:\n";
+    Order* temp = head;
+    int count = 1;
+    while (temp != nullptr) {
+        cout << "Order " << count << ":\n";
+        cout << "Name: " << temp->customer.name << endl;
+        cout << "Coffee Order: " << temp->customer.coffeeOrder << endl;
+        cout << "---------------------\n";
+        temp = temp->next;
+        count++;
+    }
+}
+
+void MainMenu(int &choice){
+    cout << "Main Menu\n";
+    cout << "1. Employee\n";
+    cout << "2. Receptionist\n";
+    cout << "3. Customer\n";
+    cout << "4. Exit\n";
+    cout << "Enter your choice: ";
+    cin >> choice;
+}
+
+void EmployeeMenu(int &empChoice){
+    cout << "Employee Menu\n";
+    cout << "1. Barista\n";
+    cout << "2. Cashier\n";
+    cout << "3. Receptionist\n";
+    cout << "4. Back to Main Menu\n";
+    cout << "Enter your choice: ";
+    cin >> empChoice;
+}
+
+void CustomerMenu(int &customerChoice){
+    cout << "Customer Menu\n";
+    cout << "1. Add order\n";
+    cout << "2. Checkout order\n";
+    cout << "3. View cart\n";
+    cout << "4. View Menu\n";
+    cout << "5. Back to Main Menu\n";
+    cout << "Enter your choice: ";
+    cin >> customerChoice;
+}
+
+void BaristaMenu(int &baristaChoice) {
+    cout << "Barista Menu\n";
+    cout << "1. Add item to menu\n";
+    cout << "2. Remove item from menu\n";
+    cout << "3. See orders\n";
+    cout << "4. Back to Employee Menu\n";
+    cout << "Enter your choice: ";
+    cin >> baristaChoice;
+}
+
+int main() {
+
+    int choice;
+    int empChoice;
+    int customerChoice;
+    int baristaChoice;
+    Customer newCustomer;
+    Order* orders = nullptr; 
+    do {
+        MainMenu(choice);
+        switch (choice) {
+            case 1:
+                
+                do {
+                    EmployeeMenu(empChoice);
+                    switch (empChoice) {
+                        case 1:
+                            do {
+                                BaristaMenu(baristaChoice);
+                                switch (baristaChoice) {
+                                    case 1:
+                                        // Add item to menu
+                                        // Implement logic to add item to menu
+                                        cout << "Adding item to menu...\n";
+                                        break;
+                                    case 2:
+                                        // Remove item from menu
+                                        // Implement logic to remove item from menu
+                                        cout << "Removing item from menu...\n";
+                                        break;
+                                    case 3:
+                                        // See orders
+                                        displayOrders(orders);
+                                        break;
+                                    case 4:
+                                        // Back to Employee Menu
+                                        break;
+                                    default:
+                                        cout << "Invalid choice. Please try again.\n";
+                                }
+                            } while (baristaChoice != 4);
+                            break;
+                        case 2:
+                            cout << "Cashier Menu\n";
+                            displayOrders(orders);
+                            break;
+                        case 3:
+                            cout << "Receptionist Menu\n";
+                            displayOrders(orders);
+                            break;
+                        case 4:
+                            break;
+                        default:
+                            cout << "Invalid choice. Please try again.\n";
+                    }
+                } while (empChoice != 4);
+                break;
+            case 2:
+                
+                do {
+                    // Receptionist
+                    // See orders, see history of orders
+                    cout << "Receptionist Menu\n";
+                    displayOrders(orders);
+                } while (choice != 5);
+                break;
+            case 3:
+                
+                do {
+                    CustomerMenu(customerChoice);
+                    switch (customerChoice){
+                        case 1:
+                            
+                            cout << "Enter your name: ";
+                            cin >> newCustomer.name;
+                            cout << "Enter your coffee order: ";
+                            cin >> newCustomer.coffeeOrder;
+                            addOrder(orders, newCustomer);
+                            break;
+                        case 2:
+                            // Checkout order
+                            // Logic for checkout
+                            break;
+                        case 3:
+                            displayOrders(orders);
+                            break;
+                        case 4:
+                            displayMenu();
+                            break;
+                        case 5:
+                            break;
+                        default:
+                            cout << "Invalid choice. Please try again.\n";
+                    }
+                } while (customerChoice != 5);
+                break;
+            case 4:
+                // Exit
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
